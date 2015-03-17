@@ -47,17 +47,17 @@ public class HelloResource {
 		String root_path = this.getClass().getClassLoader().getResource("/").getPath();
 		others.put(root_path);
 
-		File.createTempFile("input", "text");
-		File outputFile = new File(root_path+"/"+FILE_NAME);
-//		FileOutputStream fos = new FileOutputStream(outputFile);
+		File outputFile = File.createTempFile("input", "text");
 
-		PrintWriter printWriter = new PrintWriter(outputFile.getAbsolutePath());
-		printWriter.println(sentence);
-		printWriter.close();
-//		fos.close();
+//		FileOutputStream fos = new FileOutputStream(outputFile);
 
 		String path = outputFile.getAbsolutePath();
 		others.put(path);
+
+		PrintWriter printWriter = new PrintWriter(path);
+		printWriter.println(sentence);
+		printWriter.close();
+//		fos.close();
 
 		String nlp_path = this.getClass().getClassLoader().getResource("models").getPath();
 

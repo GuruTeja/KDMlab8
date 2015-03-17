@@ -28,7 +28,6 @@ public class HelloResource {
 		// JSONObject sysEnv = new JSONObject(System.getenv());
 
 		return "Hi Pardhu!";
-
 	}
 
 	@GET
@@ -253,11 +252,8 @@ public class HelloResource {
 
 		JSONObject object = new JSONObject();
 		object.put("results", relations);
-		object.put("others", others);
+//		object.put("others", others);
 		return object.toString();
 	}
 
-	public static void main(String[] aArgs) {
-
-	}
 }

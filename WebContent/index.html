@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-lg-12 col-md-12">
-        <form role="form" onsubmit="perform()">
+        <form role="form" onsubmit="perform()" method="GET">
             <div class="form-group">
                 <label for="sentence">Input Sentence/Pragraph : </label>
                 <textarea id="sentence" class="form-control" placeholder="Use some text"></textarea>
@@ -42,6 +42,27 @@
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js">
 </script>
 
-<script type="text/javascript" src="index.js"></script>
+<script type="text/javascript">
+var base_url = window.location.origin;
+
+function perform(event) {
+    event.preventDefault();
+	var sentence = $("#sentence");
+	var url = base_url + "/api/hello/KE/"+ encodeURI(sentence.val());
+	performService(url);
+}
+
+function performService(url) {
+	console.log(url);
+	var resultDiv = $("#result");
+	$.get(url, function(data) {
+		console.log(data);
+		resultDiv.text(JSON.stringify(data));
+	}).fail(function(data) {
+		console.log(data);
+		alert(data);
+	});
+}
+</script>
 </body>
 </html>

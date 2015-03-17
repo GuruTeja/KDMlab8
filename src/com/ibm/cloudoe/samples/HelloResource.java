@@ -1,5 +1,6 @@
 package com.ibm.cloudoe.samples;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -35,6 +36,8 @@ public class HelloResource {
 	@Path("/KE/{sentence}")
 	public String getKE(@PathParam("sentence") String sentence) throws JSONException, FileNotFoundException {
 
+		JSONArray others = new JSONArray();
+
 		if (sentence.isEmpty()) {
 			JSONObject jsonObject = new JSONObject();
 			jsonObject.put("error", "Please send some text for analysis. Detected empty text.");
@@ -58,8 +61,10 @@ public class HelloResource {
 			wn_path = this.getClass().getClassLoader()
 					.getResource("dict");
 			System.out.println(wn_path);
+			others.put(wn_path);
 		} catch (Exception e) {
 			System.out.println(e.toString());
+			others.put(e.toString());
 		}
 		int extr_phase = 1;
 
@@ -96,6 +101,7 @@ public class HelloResource {
 			// articles[n] = new TaggedArticle(aArgs[idx], aArgs[idx]);
 		} catch (IOException e) {
 			System.out.println(e);
+			others.put(e.toString());
 		}
 //		}
 
@@ -228,6 +234,7 @@ public class HelloResource {
 		}
 
 		System.out.println("==END==");
+		others.put("Beginning Relations");
 		// dump relation sets to a file.
 		ArrayList<Object> relations = new ArrayList<Object>();
 
@@ -240,6 +247,7 @@ public class HelloResource {
 
 		JSONObject object = new JSONObject();
 		object.put("results", relations);
+		object.put("others", others);
 		return object.toString();
 	}
 

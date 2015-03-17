@@ -1,63 +1,64 @@
+/*
+ * NewsTerp Engine - We report.  You decipher.
+ * copyright (c) 2007 Colin Bayer, Jack Hebert
+ *
+ * CSE 472 Spring 2007 final project
+ */
+
 package com.ibm.cloudoe.samples;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-
-@Path("/hello")
-public class HelloResource {
-
-	@GET
-	public String getInformation() {
-
-		// 'VCAP_APPLICATION' is in JSON format, it contains useful information about a deployed application
-		// String envApp = System.getenv("VCAP_APPLICATION");
-
-		// 'VCAP_SERVICES' contains all the credentials of services bound to this application.
-		// String envServices = System.getenv("VCAP_SERVICES");
-		// JSONObject sysEnv = new JSONObject(System.getenv());
-
-		return "Hi Pardhu!";
-
+public class Main {
+	public static void usage() {
+		System.err
+				.println("Usage: java Main [-nlp <dir>] [-wn <dir>] [-nnp <n>] <file1>\n"
+						+ "\t\t<file2> ... <fileN>\n"
+						+ "\t-p1:\t use phase 1 extractor\n"
+						+ "\t-p2:\t use phase 2 extractor (default)\n"
+						+ "\t-nlp <dir>:\t OpenNLP Tools root directory\n"
+						+ "\t-wn <dir>:\t WordNet dictionary location (absolute path)\n"
+						+ "\t-nnp <n>: Number of most-popular NPs to print\n");
 	}
 
-	@GET
-	@Produces("application/json")
-	@Path("/KE")
-	public String getKE() throws JSONException {
-		String path = this.getClass().getClassLoader()
-				.getResource("text.txt").getPath();
-
+	public static void main(String[] aArgs) {
+		System.out.println(Arrays.toString(aArgs));
+		int idx = 0;
 		String nlp_path = "/Users/pradyumnad/Downloads/CS560_T9/text_Runner/opennlp-tools-1.3.0";
-		nlp_path = this.getClass().getClassLoader()
-				.getResource("models").getPath();
 		URL wn_path = null;
 		int numToShow = 350;
 		try {
-			wn_path = this.getClass().getClassLoader()
-					.getResource("dict");
+			wn_path = new URL(
+					"file:///Users/pradyumnad/KDM/WordNet-3.1/WordNet-3.1/dict");
 			System.out.println(wn_path);
+			/*
+			 * String pwd = System.getProperty("user.dir");
+			 * 
+			 * if (pwd != null) { wn_path = new File(pwd).toURL(); }
+			 */
 		} catch (Exception e) {
 			System.out.println(e.toString());
 		}
 		int extr_phase = 1;
 
+		if (aArgs.length - idx <= 0) {
+			/* we need at least one file to extract main ideas from. */
+			usage();
+			return;
+		}
+
 		/* build OpenNLP processing objects */
 		if (!NLPToolkitManager.init(nlp_path
-				+ "/english/sentdetect/EnglishSD.bin.gz", nlp_path
-				+ "/english/tokenize/EnglishTok.bin.gz", nlp_path
-				+ "/english/parser/tag.bin.gz", nlp_path
-				+ "/english/parser/tagdict", nlp_path
-				+ "/english/chunker/EnglishChunk.bin.gz", wn_path)) {
+				+ "/models/english/sentdetect/EnglishSD.bin.gz", nlp_path
+				+ "/models/english/tokenize/EnglishTok.bin.gz", nlp_path
+				+ "/models/english/parser/tag.bin.gz", nlp_path
+				+ "/models/english/parser/tagdict", nlp_path
+				+ "/models/english/chunker/EnglishChunk.bin.gz", wn_path)) {
 			System.err.println("Error creating NLP objects, exiting...");
-			return "Error creating NLP objects, exiting...";
+			return;
 		}
 
 		/* provide space to store the processed articles... */
@@ -65,25 +66,24 @@ public class HelloResource {
 		ArrayList<TaggedArticle> articleList = new ArrayList<TaggedArticle>();
 
 		/* chop up and tag all of our articles. */
-//		for (int n = 0; idx < aArgs.length; idx++, n++) {
-		try {
-			NewsRepoReader reader = new NewsRepoReader(path);
-			NewsRepoArticle article = reader.GetNextArticle();
-			int count = 0;
-			while (article != null) {
-				count += 1;
-				System.out.println("*****************************");
-				System.out.println(count + "/"
-						+ reader.GetNumberOfArticle());
-				articleList.add(new TaggedArticle(article.getUrl(), article
-						.getArticle()));
-				article = reader.GetNextArticle();
+		for (int n = 0; idx < aArgs.length; idx++, n++) {
+			try {
+				NewsRepoReader reader = new NewsRepoReader(aArgs[idx]);
+				NewsRepoArticle article = reader.GetNextArticle();
+				int count = 0;
+				while (article != null) {
+					count += 1;
+					System.out.println("*****************************");
+					System.out.println(count + "/"
+							+ reader.GetNumberOfArticle());
+					articleList.add(new TaggedArticle(article.getUrl(), article
+							.getArticle()));
+					article = reader.GetNextArticle();
+				}
+				// articles[n] = new TaggedArticle(aArgs[idx], aArgs[idx]);
+			} catch (IOException e) {
 			}
-			// articles[n] = new TaggedArticle(aArgs[idx], aArgs[idx]);
-		} catch (IOException e) {
-			System.out.println(e);
 		}
-//		}
 
 		// TODO: convert arrayList back to array?
 
@@ -215,19 +215,21 @@ public class HelloResource {
 
 		System.out.println("==END==");
 		// dump relation sets to a file.
-		ArrayList<String> relations = new ArrayList<String>();
+		try {
+			FileWriter rsf = new FileWriter("relations-phase" + extr_phase
+					+ ".dat");
 
-		for (RelationSet rs : rel_sets) {
-			relations.add(rs.toSerialRep());
-			System.out.println(rs.toSerialRep());
+			for (RelationSet rs : rel_sets) {
+				System.out.println(rs.toSerialRep());
+				
+				rsf.write(rs.toSerialRep());
+			}
+
+			rsf.write("\n");
+
+			rsf.close();
+		} catch (IOException e) {
+			System.err.println("Warning: couldn't dump relation sets...");
 		}
-
-		JSONObject object = new JSONObject();
-		object.put("results", relations);
-		return object.toString();
-	}
-
-	public static void main(String[] aArgs) {
-
 	}
 }

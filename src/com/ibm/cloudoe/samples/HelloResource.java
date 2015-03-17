@@ -44,8 +44,6 @@ public class HelloResource {
 			return jsonObject.toString();
 		}
 
-		String path = this.getClass().getClassLoader().getResource("/").getPath()+"/"+FILE_NAME;
-
 		File outputFile = new File(FILE_NAME);
 		FileOutputStream fos = new FileOutputStream(outputFile);
 
@@ -53,6 +51,9 @@ public class HelloResource {
 		printWriter.println(sentence);
 		printWriter.close();
 		fos.close();
+
+		String path = this.getClass().getClassLoader().getResource(FILE_NAME).getPath();
+		others.put(path);
 
 		String nlp_path = this.getClass().getClassLoader().getResource("models").getPath();
 

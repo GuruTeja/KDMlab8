@@ -67,7 +67,8 @@ public class Relation {
 		if (mSubject == null || mPredicate == null)
 			return ";\n";
 		return "(" + mSubject.toSerialRep() + "," + mPredicate.toSerialRep()
-				+ "," + objsToSerialRep() + ")+[" + annosToSerialRep() + "]";
+				+ "," + objsToSerialRep() + ")";
+//				+ "," + objsToSerialRep() + ")+[" + annosToSerialRep() + "]";
 	}
 
 	private Entity mSubject;

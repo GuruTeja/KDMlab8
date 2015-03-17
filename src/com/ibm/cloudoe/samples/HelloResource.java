@@ -215,10 +215,12 @@ public class HelloResource {
 
 		System.out.println("==END==");
 		// dump relation sets to a file.
-		ArrayList<String> relations = new ArrayList<String>();
+		ArrayList<Object> relations = new ArrayList<Object>();
 
 		for (RelationSet rs : rel_sets) {
-			relations.add(rs.toSerialRep());
+			HashMap<String, Object> map = new HashMap<String, Object>();
+
+			relations.add(rs.toObjectRep());
 			System.out.println(rs.toSerialRep());
 		}
 

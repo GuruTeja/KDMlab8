@@ -7,6 +7,8 @@
 
 package com.ibm.cloudoe.samples;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -30,6 +32,21 @@ public class RelationSet {
 		rv += "endset;\n";
 
 		return rv;
+	}
+
+	public HashMap<String, Object> toObjectRep() {
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("set", mID);
+
+		ArrayList<String> rv = new ArrayList<String>();
+
+		for (Relation r : mRelations) {
+			rv.add(r.toSerialRep());
+		}
+
+		map.put("relations", rv);
+
+		return map;
 	}
 
 	private Set<Relation> mRelations;

@@ -44,7 +44,10 @@ public class HelloResource {
 			return jsonObject.toString();
 		}
 
-		File outputFile = new File(FILE_NAME);
+		String root_path = this.getClass().getClassLoader().getResource("/").getPath();
+		others.put(root_path);
+
+		File outputFile = new File(root_path+"/"+FILE_NAME);
 		FileOutputStream fos = new FileOutputStream(outputFile);
 
 		PrintWriter printWriter = new PrintWriter(fos);

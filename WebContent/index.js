@@ -1,6 +1,7 @@
 var base_url = window.location.origin;
 
-function perform() {
+function perform(event) {
+    event.preventDefault();
 	var sentence = $("#sentence");
 	var url = base_url + "/api/hello/KE/"+ encodeURI(sentence.val());
 	performService(url);

@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-lg-12 col-md-12">
-        <form role="form">
+        <form role="form" onsubmit="perform()">
             <div class="form-group">
                 <label for="sentence">Input Sentence/Pragraph : </label>
                 <textarea id="sentence" class="form-control" placeholder="Use some text"></textarea>
@@ -30,7 +30,7 @@
                 </div>
             </div>
             <h4>
-                <button class="btn btn-default" onclick="perform()">Fetch</button>
+                <button type="submit" class="btn btn-primary">Fetch</button>
             </h4>
         </form>
     </div>

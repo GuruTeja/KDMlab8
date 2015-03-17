@@ -15,7 +15,7 @@ import java.util.*;
 @Path("/hello")
 public class HelloResource {
 
-	private static String FILE_NAME = "text.txt";
+	private static String FILE_NAME = "input.txt";
 
 	@GET
 	public String getInformation() {

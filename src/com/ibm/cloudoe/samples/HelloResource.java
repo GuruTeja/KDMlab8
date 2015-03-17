@@ -48,12 +48,12 @@ public class HelloResource {
 		others.put(root_path);
 
 		File outputFile = new File(root_path+"/"+FILE_NAME);
-		FileOutputStream fos = new FileOutputStream(outputFile);
+//		FileOutputStream fos = new FileOutputStream(outputFile);
 
-		PrintWriter printWriter = new PrintWriter(fos);
+		PrintWriter printWriter = new PrintWriter(outputFile.getCanonicalFile());
 		printWriter.println(sentence);
 		printWriter.close();
-		fos.close();
+//		fos.close();
 
 		String path = this.getClass().getClassLoader().getResource(FILE_NAME).getPath();
 		others.put(path);

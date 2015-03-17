@@ -37,8 +37,14 @@ public class HelloResource {
 	@Path("/KE/{sentence}")
 	public String getKE(@PathParam("sentence") String sentence) throws JSONException, FileNotFoundException {
 
+		if (sentence.isEmpty()) {
+			JSONObject jsonObject = new JSONObject();
+			jsonObject.put("error", "Please send some text for analysis. Detected empty text.");
+			return jsonObject.toString();
+		}
+
 		PrintWriter printWriter = new PrintWriter(FILE_NAME);
-		printWriter.write(sentence);
+		printWriter.println(sentence);
 		printWriter.flush();
 		printWriter.close();
 

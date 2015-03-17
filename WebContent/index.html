@@ -18,7 +18,7 @@
     </div>
 
     <div class="col-lg-12 col-md-12">
-        <form role="form" onsubmit="perform()" method="GET">
+        <form id="target" role="form" method="GET">
             <div class="form-group">
                 <label for="sentence">Input Sentence/Pragraph : </label>
                 <textarea id="sentence" class="form-control" placeholder="Use some text"></textarea>
@@ -45,14 +45,14 @@
 <script type="text/javascript">
 var base_url = window.location.origin;
 
-function perform(event) {
-    event.preventDefault();
-	var sentence = $("#sentence");
-	var url = base_url + "/api/hello/KE/"+ encodeURI(sentence.val());
-	performService(url);
-}
 
-function performService(url) {
+$(document).ready(function() {
+
+$( "#target" ).submit(function( event ) {
+    alert( "Handler for .submit() called." );
+    var sentence = $("#sentence");
+	var url = base_url + "/api/hello/KE/"+ encodeURI(sentence.val());
+
 	console.log(url);
 	var resultDiv = $("#result");
 	$.get(url, function(data) {
@@ -62,7 +62,11 @@ function performService(url) {
 		console.log(data);
 		alert(data);
 	});
-}
+
+  event.preventDefault();
+});
+
+});
 </script>
 </body>
 </html>

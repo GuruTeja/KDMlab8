@@ -43,7 +43,7 @@ public class HelloResource {
 
 		String path = this.getClass().getClassLoader().getResource("/").getPath()+"/"+FILE_NAME;
 
-		File outputFile = new File(path);
+		File outputFile = new File(FILE_NAME);
 		FileOutputStream fos = new FileOutputStream(outputFile);
 
 		PrintWriter printWriter = new PrintWriter(fos);

@@ -15,7 +15,7 @@ import java.util.*;
 @Path("/hello")
 public class HelloResource {
 
-	private static String FILE_NAME = "input.txt";
+	private static String FILE_NAME = "text.txt";
 
 	@GET
 	public String getInformation() {
@@ -34,7 +34,7 @@ public class HelloResource {
 	@GET
 	@Produces("application/json")
 	@Path("/KE/{sentence}")
-	public String getKE(@PathParam("sentence") String sentence) throws JSONException, FileNotFoundException {
+	public String getKE(@PathParam("sentence") String sentence) throws JSONException, IOException {
 
 		JSONArray others = new JSONArray();
 
@@ -52,6 +52,7 @@ public class HelloResource {
 		PrintWriter printWriter = new PrintWriter(fos);
 		printWriter.println(sentence);
 		printWriter.close();
+		fos.close();
 
 		String nlp_path = this.getClass().getClassLoader().getResource("models").getPath();
 

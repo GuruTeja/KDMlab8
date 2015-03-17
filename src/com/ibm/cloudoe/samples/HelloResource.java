@@ -48,7 +48,7 @@ public class HelloResource {
 		printWriter.flush();
 		printWriter.close();
 
-		String path = this.getClass().getClassLoader().getResource(FILE_NAME).getPath();
+		String path = this.getClass().getClassLoader().getResource("/").getPath()+"/"+FILE_NAME;
 
 		String nlp_path = this.getClass().getClassLoader().getResource("models").getPath();
 

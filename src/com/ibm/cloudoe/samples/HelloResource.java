@@ -16,8 +16,14 @@ public class HelloResource {
 		// 'VCAP_SERVICES' contains all the credentials of services bound to this application.
 		// String envServices = System.getenv("VCAP_SERVICES");
 		// JSONObject sysEnv = new JSONObject(System.getenv());
-		
+
 		return "Hi Pardhu!";
 
+	}
+
+	@Path("/KE")
+	@GET
+	public String getKE() {
+		return "Hey";
 	}
 }

@@ -43,12 +43,11 @@ public class HelloResource {
 			return jsonObject.toString();
 		}
 
-		PrintWriter printWriter = new PrintWriter(FILE_NAME);
-		printWriter.println(sentence);
-		printWriter.flush();
-		printWriter.close();
-
 		String path = this.getClass().getClassLoader().getResource("/").getPath()+"/"+FILE_NAME;
+
+		PrintWriter printWriter = new PrintWriter(path);
+		printWriter.println(sentence);
+		printWriter.close();
 
 		String nlp_path = this.getClass().getClassLoader().getResource("models").getPath();
 

@@ -5,14 +5,18 @@ import org.json.JSONObject;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.*;
 
-
 @Path("/hello")
 public class HelloResource {
+
+	private static String FILE_NAME = "input.txt";
 
 	@GET
 	public String getInformation() {
@@ -30,14 +34,18 @@ public class HelloResource {
 
 	@GET
 	@Produces("application/json")
-	@Path("/KE")
-	public String getKE() throws JSONException {
-		String path = this.getClass().getClassLoader()
-				.getResource("text.txt").getPath();
+	@Path("/KE/{sentence}")
+	public String getKE(@PathParam("sentence") String sentence) throws JSONException, FileNotFoundException {
 
-		String nlp_path = "/Users/pradyumnad/Downloads/CS560_T9/text_Runner/opennlp-tools-1.3.0";
-		nlp_path = this.getClass().getClassLoader()
-				.getResource("models").getPath();
+		PrintWriter printWriter = new PrintWriter(FILE_NAME);
+		printWriter.write(sentence);
+		printWriter.flush();
+		printWriter.close();
+
+		String path = this.getClass().getClassLoader().getResource(FILE_NAME).getPath();
+
+		String nlp_path = this.getClass().getClassLoader().getResource("models").getPath();
+
 		URL wn_path = null;
 		int numToShow = 350;
 		try {

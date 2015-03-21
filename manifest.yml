@@ -1,7 +1,7 @@
 applications:
 - disk_quota: 1024M
-  host: nlplab8
-  name: nlplab89
+  host: KDMLab8
+  name: KDMLab8
   path: webStarterApp.war
   domain: mybluemix.net
   instances: 1
